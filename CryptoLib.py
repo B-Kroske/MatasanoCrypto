@@ -36,6 +36,7 @@ def xor(arr1, arr2):
 
     for i in range(0,len1):
         res.append(arr1[i] ^ arr2[i % len2])
+        #print(i,format('%x',res[i]))
     return res
 
 #Finds the frequency of letters in the string and compares the top/bottom numCmp
@@ -47,13 +48,10 @@ def freqScore(string):
     score = 0
 
     for (x,y) in strFreq:
-        if ord(x) < 0x20 or ord(x) > 0x7e:
-            return -1
-        else:
-            try:
-                score += (y / length) * letterFreq[x]
-            except:
-                score -= 0.1
+        try:
+            score += (y / length) * letterFreq[x]
+        except:
+            score -= 0.1
 
     return score
 
@@ -66,7 +64,7 @@ def xorBruteForce1(ciphertext):
     bestScore = 0
     key = 0
 
-    for i in range(0,256):
+    for i in range(0,255):
         #print(bytearray({i}))
         try:
             currStr = xor(ciphertext,bytearray({i})).decode()
