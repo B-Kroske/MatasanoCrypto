@@ -1,6 +1,7 @@
 #Stores functions to simplify completing the challenges
 from collections import Counter
 import base64
+import binascii
 
 letterFreq = {'E': 12.70, 'T': 9.06, 'A': 8.17, 'O': 7.51, 'I': 6.97, 'N': 6.75,
 'S': 6.33, 'H': 6.09, 'R': 5.99, 'D': 4.25, 'L': 4.03, 'C': 2.78, 'U': 2.76,
@@ -17,8 +18,6 @@ def validate(guess, ans, isVerbose = False):
         if(isVerbose != False):
             print('' + str(guess) + " != " + str(ans))
 
-
-
 #Takes a hex string or a byte array/string to convert to base 64
 def toBase64(val):
     if(type(val).__name__ == 'str'):
@@ -27,15 +26,24 @@ def toBase64(val):
         type(val).__name__ == 'bytes'):
         return base64.b64encode(val)
 
+#Converts an ascii string to a byte array
+def strToByteArr(inputStr):
+    return bytearray(inputStr.encode())
+
+#converts a hex string to a byte array
+def hexToByteArr(hexStr):
+    return bytearray.tohex(hexStr)
+
 #Xors two byte arrays
 #Resulting array is the same length as the first array.
-def xor(arr1, arr2):
+def xor(arr1, key):
     len1 = len(arr1)
-    len2 = len(arr2)
-    res = bytearray()
+    keyLen = len(key)
+    res = bytearray(len1)
 
     for i in range(0,len1):
-        res.append(arr1[i] ^ arr2[i % len2])
+        #print(arr1[i],key[i%keyLen],arr1[i] ^ key[i % keyLen])
+        res[i] = arr1[i] ^ key[i % keyLen]
         #print(i,format('%x',res[i]))
     return res
 
