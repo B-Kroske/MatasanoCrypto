@@ -90,7 +90,7 @@ def xorBruteForce1(ciphertext):
     return (key, bestScore, bestStr)
 
 '''
-From Challenge 6
+From Challenge 1.6
 '''
 
 #Takes a byte array and returns an array that consists of every nth byte
@@ -131,3 +131,13 @@ def avgHamming(array, hamLen, hamCount = 1):
         #print(hamLen,"-",numBits)
 
     return float(numBits) / hamCount
+
+'''
+    From Challenge 2.7
+'''
+
+#Pads the given array out to padLen bytes with the given hex value
+def padStr(arr, padLen, padChar = 4):
+    for i in range(len(arr), padLen):
+        arr.append(padChar)
+    return arr
