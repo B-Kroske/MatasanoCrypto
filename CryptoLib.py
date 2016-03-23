@@ -88,3 +88,46 @@ def xorBruteForce1(ciphertext):
             continue
 
     return (key, bestScore, bestStr)
+
+'''
+From Challenge 6
+'''
+
+#Takes a byte array and returns an array that consists of every nth byte
+def everyNth(array,n,start = 0):
+    resLen = int(len(array) / n)
+    resArr = bytearray(resLen)
+
+    for i in range(0, resLen):
+        resArr[i] = array[(start + (n * i))]
+
+    return resArr
+
+#Calculates the hamming distance between two byte arrays
+def calcHamming(arr1, arr2):
+    numBits = 0
+    resArr = xor(arr1,arr2)
+    for j in range(0,len(arr1)):
+        numBits += bin(resArr[j]).count('1')
+    return numBits
+
+#Calculates the average hamming distance between hamCount pairs of hamLen
+#that are a part of array
+def avgHamming(array, hamLen, hamCount = 1):
+    start = 0
+    end = hamLen
+    numBits = 0
+
+    currArr = []
+    nextArr = []
+    resArr = []
+
+    for i in range(0,hamCount):
+        currArr = array[start:end]
+        start = end
+        end += hamLen
+        nextArr = array[start:end]
+        numBits += calcHamming(currArr,nextArr)
+        #print(hamLen,"-",numBits)
+
+    return float(numBits) / hamCount
