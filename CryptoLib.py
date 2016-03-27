@@ -141,3 +141,42 @@ def padStr(arr, padLen, padChar = 4):
     for i in range(len(arr), padLen):
         arr.append(padChar)
     return arr
+
+'''
+    From Set 2, Challenge 2
+'''
+class CBC:
+    def __init__(self, ECB, IV, blocksize = 16):
+        self.ECB = ECB
+        self.IV = IV
+        self.blocksize = blocksize
+
+    def getBlocks(self, s):
+        return [s[i:i+self.blocksize] for i in range(0, len(s), self.blocksize)]
+
+    def encrypt(self, plaintext):
+        ptBlocks = self.getBlocks(plaintext)
+        ciphertext = b''
+        prev = self.IV
+        for block in ptBlocks:
+            toEnc = xor(prev, block)
+            cipherBlock = self.ECB.encrypt(bytes(toEnc))
+            prev = cipherBlock
+            #print(cipherBlock)
+            ciphertext += cipherBlock
+
+        return ciphertext
+
+    def decrypt(self, ciphertext):
+        #Split the ciphertext into blocks
+        ctBlocks = self.getBlocks(ciphertext)
+        plaintext = b''
+        prev = self.IV
+
+        for block in ctBlocks:
+            #Decrypt the ciphertext block and xor it with the IV/Previous block
+            plainBlock = bytes(xor(prev, self.ECB.decrypt(block)))
+            prev = block
+            plaintext += plainBlock
+
+        return plaintext
