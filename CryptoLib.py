@@ -133,14 +133,23 @@ def avgHamming(array, hamLen, hamCount = 1):
     return float(numBits) / hamCount
 
 '''
-    From Challenge 2.7
+    From Challenge 2.1
 '''
-
-#Pads the given array out to padLen bytes with the given hex value
+#Pads the given arrayj out to padLen bytes
 def padStr(arr, padLen, padChar = 4):
     for i in range(len(arr), padLen):
         arr.append(padChar)
     return arr
+
+#Pads using pkcs7
+def pkcs7(arr):
+    padTo = len(arr)
+    toApp = 0
+    if(len(arr) % 16):
+        toApp = 16 - (len(arr) % 16)
+        padTo = toApp + len(arr)
+    res = padStr(arr, padTo, toApp)
+    return res
 
 '''
     From Set 2, Challenge 2
@@ -180,3 +189,24 @@ class CBC:
             plaintext += plainBlock
 
         return plaintext
+
+'''
+    From Set 2, Challenge 3
+'''
+#This has around 80% accuracy.
+def isECB(ct):
+    arr = bytearray(ct)
+    count = None
+    score = 0
+    for i in range(16):
+        nthStr = everyNth(arr, 16, i)
+        count = Counter(bytes(nthStr))
+        common = count.most_common()
+        score += common[0][1]
+
+    #print("Score =", score)
+    #print("len =", len(ct))
+    if(score > len(ct) / 14):
+        return True
+    else:
+        return False
